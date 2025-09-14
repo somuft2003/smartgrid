@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Smart Grid - Feeder 1</title>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+</head>
+<body style="font-family:Arial, sans-serif; margin:0; background:linear-gradient(135deg,#6a89cc,#1e3799); color:#fff;">
+
+  <h1 style="text-align:center; padding:25px; margin:0; text-shadow:2px 2px 10px rgba(0,0,0,0.5);">
+    ⚡ Feeder 1 Parameters ⚡
+  </h1>
+
+  <div style="max-width:480px; margin:30px auto; padding:25px; border-radius:20px; background:#fff; color:#333;
+              box-shadow:0 10px 25px rgba(0,0,0,0.4); transition:0.3s;">
+    
+    <p style="font-size:18px; margin:15px 0;"><b style="color:#ff4757;">🔌 Voltage:</b> <span id="voltage">--</span> V</p>
+    <p style="font-size:18px; margin:15px 0;"><b style="color:#1e90ff;">⚡ Current:</b> <span id="current">--</span> A</p>
+    <p style="font-size:18px; margin:15px 0;"><b style="color:#2ed573;">💡 Power:</b> <span id="power">--</span> W</p>
+    <p style="font-size:18px; margin:15px 0;"><b style="color:#ffa502;">📊 Power Factor:</b> <span id="pf">--</span></p>
+    <p style="font-size:18px; margin:15px 0;"><b style="color:#3742fa;">🎵 Frequency:</b> <span id="freq">--</span> Hz</p>
+    <p style="font-size:18px; margin:15px 0;"><b style="color:#70a1ff;">🔋 Energy:</b> <span id="energy">--</span> kWh</p>
+    <p style="font-size:20px; margin:15px 0;"><b style="color:#ff6b81;">🚦 Status:</b> 
+       <span id="status" style="font-weight:bold; padding:5px 12px; border-radius:8px;">OFF</span></p>
+
+    <button id="toggleBtn" 
+            style="margin-top:20px; padding:14px 28px; font-size:16px; border-radius:12px; cursor:pointer; 
+                   border:none; font-weight:bold; background:#576574; color:white; 
+                   box-shadow:0 4px 10px rgba(0,0,0,0.3); transition:0.3s;">
+      Toggle Grid
+    </button>
+  </div>
+
+  <script>
+    // Firebase config
+    var firebaseConfig = {
+      apiKey: "AIzaSyArk9tgI7lNs0SB_A1cuFXFPWCyh__7E_8",
+      authDomain: "smart-grid-7ecdb.firebaseapp.com",
+      databaseURL: "https://smartgrid-a8ba3-default-rtdb.firebaseio.com/",
+      projectId: "smart-grid-7ecdb",
+      storageBucket: "smart-grid-7ecdb.appspot.com",
+      messagingSenderId: "1234567890",
+      appId: "1:1234567890:web:abcdef"
+    };
+    firebase.initializeApp(firebaseConfig);
+    var db = firebase.database();
+
+    // Realtime update using F2
+    db.ref().on("value", function(snapshot) {
+      var data = snapshot.val();
+      document.getElementById("voltage").innerText = data.F2voltage;
+      document.getElementById("current").innerText = data.F2current;
+      document.getElementById("power").innerText   = data.F2power;
+      document.getElementById("pf").innerText      = data.F2pf;
+      document.getElementById("freq").innerText    = data.F2frequency;
+      document.getElementById("energy").innerText  = data.F2energy;
+
+      var statusEl = document.getElementById("status");
+      var btn = document.getElementById("toggleBtn");
+      if (data.F2 == 1) {
+        statusEl.innerText = "ON";
+        statusEl.style.color = "#fff";
+        statusEl.style.background = "#2ed573";
+        btn.style.background = "#ff4757";
+        btn.innerText = "Turn OFF Grid";
+      } else {
+        statusEl.innerText = "OFF";
+        statusEl.style.color = "#fff";
+        statusEl.style.background = "#ff4757";
+        btn.style.background = "#2ed573";
+        btn.innerText = "Turn ON Grid";
+      }
+    });
+
+    // Toggle F2 ON/OFF
+    document.getElementById("toggleBtn").addEventListener("click", function() {
+      db.ref("F2").once("value").then(function(snapshot) {
+        var current = snapshot.val();
+        var newVal = current == 1 ? 0 : 1;
+        db.ref().update({F2: newVal});
+      });
+    });
+  </script>
+</body>
+</html>
