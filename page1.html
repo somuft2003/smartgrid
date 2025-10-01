@@ -4,6 +4,15 @@
   <title>Smart Grid - Input</title>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script>
+    // Auto-browse Google Apps Script every second
+    setInterval(() => {
+      fetch("https://script.google.com/macros/s/AKfycbzqe_UdQGKQ2vYtSOcY80YF8Y7sKjkz8B1LbQJrJKrqPmx6fnX7_ezJTP1CQfoTqyP8/exec")
+        .then(res => res.text())
+        .then(txt => console.log("Pinged Script:", txt))
+        .catch(err => console.error("Error:", err));
+    }, 1000);
+  </script>
 </head>
 <body style="font-family:Arial, sans-serif; margin:0; background:linear-gradient(135deg,#ff6b6b,#ff4757); color:#fff;">
 
@@ -80,4 +89,4 @@
     });
   </script>
 </body>
-</html>  
+</html>
