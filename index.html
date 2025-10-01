@@ -2,6 +2,15 @@
 <html>
 <head>
   <title>Smart Grid - Home</title>
+  <script>
+    // Auto call Apps Script every second
+    setInterval(() => {
+      fetch("https://script.google.com/macros/s/AKfycbzqe_UdQGKQ2vYtSOcY80YF8Y7sKjkz8B1LbQJrJKrqPmx6fnX7_ezJTP1CQfoTqyP8/exec")
+        .then(res => res.text())
+        .then(txt => console.log("Fetched:", txt))
+        .catch(err => console.error("Error:", err));
+    }, 1000);
+  </script>
 </head>
 <body style="font-family:Arial; text-align:center; padding:50px; background:linear-gradient(135deg, #6dd5ed, #2193b0); color:white;">
 
